@@ -4,6 +4,7 @@ using Board.enties;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Board.Migrations
 {
     [DbContext(typeof(MyBoardsContext))]
-    partial class MyBoardsContextModelSnapshot : ModelSnapshot
+    [Migration("20230324083645_FUllName")]
+    partial class FUllName
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -59,8 +62,8 @@ namespace Board.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<Guid>("AuthorID")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("Author")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreatedDate")
                         .ValueGeneratedOnAdd()
@@ -78,8 +81,6 @@ namespace Board.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("AuthorID");
 
                     b.HasIndex("WorkItemId");
 
@@ -100,33 +101,6 @@ namespace Board.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Tags");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Value = "Web"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Value = "UI"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Value = "Dekstop"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Value = "API"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            Value = "Service"
-                        });
                 });
 
             modelBuilder.Entity("Board.Enties.User", b =>
@@ -205,23 +179,6 @@ namespace Board.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("WorkItemStates");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Value = "To Do"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Value = "Doing"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Value = "Done"
-                        });
                 });
 
             modelBuilder.Entity("Board.enties.WorkItemTag", b =>
@@ -296,19 +253,11 @@ namespace Board.Migrations
 
             modelBuilder.Entity("Board.Enties.Comment", b =>
                 {
-                    b.HasOne("Board.Enties.User", "Author")
-                        .WithMany("Comments")
-                        .HasForeignKey("AuthorID")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
                     b.HasOne("Board.Enties.WorkItem", "WorkItem")
                         .WithMany("Comments")
                         .HasForeignKey("WorkItemId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Author");
 
                     b.Navigation("WorkItem");
                 });
@@ -354,8 +303,6 @@ namespace Board.Migrations
             modelBuilder.Entity("Board.Enties.User", b =>
                 {
                     b.Navigation("Address");
-
-                    b.Navigation("Comments");
 
                     b.Navigation("WorkItems");
                 });

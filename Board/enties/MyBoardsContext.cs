@@ -18,7 +18,7 @@ namespace Board.enties
         public DbSet<Comment> Comments { get; set; }
         public DbSet<Address> Addresses { get; set; }
         public DbSet<WorkItemState> WorkItemStates { get; set; }
-
+        public DbSet<WorkItemTag> orkItemTag { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<WorkItemState>()
@@ -82,6 +82,10 @@ namespace Board.enties
             {
                 eb.Property(wi => wi.CreatedDate).HasDefaultValueSql("getutcdate()");
                 eb.Property(wi => wi.UpdatedDate).ValueGeneratedOnUpdate();
+                eb.HasOne(c => c.Author)
+                .WithMany(a => a.Comments)
+                .HasForeignKey(c => c.AuthorID)
+                .OnDelete(DeleteBehavior.ClientCascade);
             });
 
             modelBuilder.Entity<User>()
@@ -89,7 +93,17 @@ namespace Board.enties
                 .WithOne(a => a.User)
                 .HasForeignKey<Address>(a => a.UserId);
 
-
+            modelBuilder.Entity<WorkItemState>()
+                .HasData(new WorkItemState() {Id = 1 , Value = "To Do" },
+                new WorkItemState() { Id = 2 , Value = "Doing" },
+                new WorkItemState() { Id = 3 ,Value = "Done" });
+            modelBuilder.Entity<Tag>()
+                .HasData(new Tag(){Id = 1 ,Value = "Web"},
+                new Tag() { Id = 2, Value = "UI" },
+                new Tag() { Id = 3, Value = "Dekstop" },
+                new Tag() { Id = 4, Value = "API" },
+                new Tag() { Id = 5, Value = "Service" });
         }
+
     }
 }

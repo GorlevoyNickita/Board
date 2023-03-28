@@ -4,6 +4,7 @@ using Board.enties;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Board.Migrations
 {
     [DbContext(typeof(MyBoardsContext))]
-    partial class MyBoardsContextModelSnapshot : ModelSnapshot
+    [Migration("20230324112715_AdditionWorkItemState")]
+    partial class AdditionWorkItemState
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -100,33 +103,6 @@ namespace Board.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Tags");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Value = "Web"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Value = "UI"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Value = "Dekstop"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Value = "API"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            Value = "Service"
-                        });
                 });
 
             modelBuilder.Entity("Board.Enties.User", b =>
